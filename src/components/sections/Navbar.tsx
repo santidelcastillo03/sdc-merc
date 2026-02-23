@@ -5,14 +5,14 @@ import { useState, useEffect } from "react";
 
 // Links de navegación: apuntan a los IDs de cada sección para smooth scroll
 const navLinks = [
-  { label: "IA", href: "#potencial" },
-  { label: "Stack", href: "#stack" },
-  { label: "Mercantil", href: "#mercantil" },
-  { label: "Bot", href: "#bot" },
+  { label: "IA", href: "#potencial", highlight: false },
+  { label: "Stack", href: "#stack", highlight: false },
+  { label: "Mercantil", href: "#mercantil", highlight: false },
+  { label: "Bot", href: "#bot", highlight: true },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);   // Detecta si se hizo scroll para cambiar estilo
+  const [scrolled, setScrolled] = useState(false);    // Detecta si se hizo scroll para cambiar estilo
   const [mobileOpen, setMobileOpen] = useState(false); // Controla el menú mobile
 
   // Listener de scroll para activar fondo con blur después de 40px
@@ -25,7 +25,9 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+        mobileOpen
+          ? "bg-merc-dark border-b border-merc-blue/10"
+          : scrolled
           ? "bg-merc-dark/80 backdrop-blur-xl border-b border-merc-blue/10"
           : "bg-transparent"
       }`}
@@ -45,52 +47,92 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm text-muted-foreground hover:text-white transition-colors duration-200"
+              className={`text-sm transition-colors duration-200 ${
+                link.highlight
+                  ? "bg-gradient-to-r from-merc-orange via-merc-amber to-merc-orange bg-clip-text text-transparent font-semibold"
+                  : "text-muted-foreground hover:text-white"
+              }`}
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        {/* Botón hamburguesa para mobile: 3 líneas que se animan en X al abrir */}
+        {/* Botón hamburguesa: 3 líneas que se animan en X al abrir, con color naranja cuando está abierto */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden flex flex-col gap-1.5 p-1"
+          className="md:hidden flex flex-col gap-[5px] p-2 -mr-1 rounded-lg hover:bg-white/5 transition-colors"
           aria-label="Menu"
         >
           <span
-            className={`block w-5 h-0.5 bg-white transition-transform duration-200 ${
-              mobileOpen ? "rotate-45 translate-y-2" : ""
+            className={`block h-px transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center ${
+              mobileOpen
+                ? "w-5 bg-merc-orange rotate-45 translate-y-[6px]"
+                : "w-5 bg-white"
             }`}
           />
           <span
-            className={`block w-5 h-0.5 bg-white transition-opacity duration-200 ${
-              mobileOpen ? "opacity-0" : ""
+            className={`block h-px bg-white transition-all duration-200 ${
+              mobileOpen ? "w-0 opacity-0" : "w-3.5 opacity-100"
             }`}
           />
           <span
-            className={`block w-5 h-0.5 bg-white transition-transform duration-200 ${
-              mobileOpen ? "-rotate-45 -translate-y-2" : ""
+            className={`block h-px transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center ${
+              mobileOpen
+                ? "w-5 bg-merc-orange -rotate-45 -translate-y-[6px]"
+                : "w-5 bg-white"
             }`}
           />
         </button>
       </div>
 
-      {/* Menú desplegable mobile: se cierra al tocar un link */}
-      {mobileOpen && (
-        <div className="md:hidden bg-merc-dark/95 backdrop-blur-xl border-b border-merc-blue/10 px-5 pb-4">
-          {navLinks.map((link) => (
+      {/* Menú desplegable mobile: panel con efecto slide + stagger por link */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          mobileOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="bg-merc-dark border-b border-merc-blue/10 px-5 py-3">
+          {/* Línea decorativa superior */}
+          <div className="w-full h-px bg-gradient-to-r from-merc-orange/30 via-merc-blue/20 to-transparent mb-3" />
+
+          {navLinks.map((link, i) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
-              className="block py-2 text-sm text-muted-foreground hover:text-white transition-colors"
+              className={`flex items-center justify-between py-3 text-sm border-b border-merc-blue/5 last:border-0 transition-all duration-200 group ${
+                link.highlight ? "" : "text-muted-foreground hover:text-white"
+              }`}
+              style={{
+                // Stagger en la aparición de cada link
+                transitionDelay: mobileOpen ? `${i * 40}ms` : "0ms",
+              }}
             >
-              {link.label}
+              {/* Label con gradiente para Bot, texto normal para el resto */}
+              {link.highlight ? (
+                <span className="bg-gradient-to-r from-merc-orange via-merc-amber to-merc-orange bg-clip-text text-transparent font-semibold">
+                  {link.label}
+                </span>
+              ) : (
+                <span>{link.label}</span>
+              )}
+
+              {/* Flecha sutil a la derecha */}
+              <svg
+                className={`w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5 ${
+                  link.highlight ? "text-merc-orange" : "text-merc-blue/30 group-hover:text-merc-blue/60"
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </a>
           ))}
         </div>
-      )}
+      </div>
     </nav>
   );
 }
