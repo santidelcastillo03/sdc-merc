@@ -2,7 +2,7 @@
 // Conecta con /api/chat que usa Gemini como modelo
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // Tipado de mensajes del chat
 interface Message {
@@ -38,6 +38,139 @@ INSTRUCCIONES:
 - Si preguntan sobre seguros e IA, da respuestas concretas y realistas
 - Mantén respuestas concisas (2-4 párrafos máximo)
 - Puedes usar un tono ligeramente informal pero siempre profesional`;
+
+// Panel de chat: mensajes, sugerencias iniciales, input y botón enviar
+interface ChatPanelProps {
+  messages: Message[];
+  loading: boolean;
+  input: string;
+  setInput: (v: string) => void;
+  sendMessage: () => void;
+  messagesEndRef: React.RefObject<HTMLDivElement | null>;
+}
+
+function ChatPanel({ messages, loading, input, setInput, sendMessage, messagesEndRef }: ChatPanelProps) {
+  return (
+    <div className="flex flex-col h-[500px] sm:h-[550px]">
+      {/* Área de mensajes con scroll */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {/* Estado vacío: icono, texto guía y botones de sugerencia */}
+        {messages.length === 0 && (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-merc-blue/10 text-merc-blue">
+                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                Pregúntame sobre Santiago, IA, o seguros
+              </p>
+              {/* Sugerencias rápidas: al tocar, llenan el input */}
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {[
+                  "¿Quién es Santiago?",
+                  "¿Qué es RAG?",
+                  "¿Cómo funciona OpenClaw?",
+                ].map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    onClick={() => setInput(suggestion)}
+                    className="px-3 py-1.5 rounded-full text-xs border border-merc-blue/20 text-muted-foreground hover:text-white hover:border-merc-blue/40 transition-colors"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Lista de mensajes: burbujas azul (usuario) o oscura (bot) */}
+        {messages.map((msg, i) => (
+          <div
+            key={i}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+                msg.role === "user"
+                  ? "chat-bubble-user text-white"
+                  : "chat-bubble-bot text-foreground"
+              }`}
+            >
+              {msg.content}
+            </div>
+          </div>
+        ))}
+
+        {/* Indicador de escritura: 3 puntos animados con bounce escalonado */}
+        {loading && (
+          <div className="flex justify-start">
+            <div className="chat-bubble-bot rounded-2xl px-4 py-3">
+              <div className="flex gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-merc-blue/50 animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-2 h-2 rounded-full bg-merc-blue/50 animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-2 h-2 rounded-full bg-merc-blue/50 animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Elemento invisible para auto-scroll */}
+        <div ref={messagesEndRef} />
+      </div>
+
+      {/* Formulario de input: campo de texto + botón enviar */}
+      <div className="border-t border-merc-blue/10 p-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendMessage();
+          }}
+          className="flex gap-2"
+        >
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Escribe tu mensaje..."
+            className="flex-1 rounded-xl bg-merc-dark-lighter border border-merc-blue/15 px-4 py-3 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-merc-blue/40 transition-colors"
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            disabled={loading || !input.trim()}
+            className="rounded-xl bg-merc-blue px-4 py-3 text-sm font-medium text-white hover:bg-merc-blue/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          >
+            {/* Icono de enviar */}
+            <svg className="w-4 h-4 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// Panel del system prompt: muestra el prompt en formato código con syntax highlighting
+function PromptPanel() {
+  return (
+    <div className="h-[500px] sm:h-[550px] overflow-y-auto p-4 sm:p-6">
+      {/* Indicador verde de "activo" */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
+        <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
+          System Prompt
+        </span>
+      </div>
+      {/* System prompt renderizado con fuente monoespaciada */}
+      <pre className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap font-mono bg-merc-dark/50 rounded-xl p-4 border border-merc-blue/10">
+        {SYSTEM_PROMPT}
+      </pre>
+    </div>
+  );
+}
 
 export default function ChatBot() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -109,128 +242,6 @@ export default function ChatBot() {
     }
   };
 
-  // Panel de chat: mensajes, sugerencias iniciales, input y botón enviar
-  const ChatPanel = () => (
-    <div className="flex flex-col h-[500px] sm:h-[550px]">
-      {/* Área de mensajes con scroll */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {/* Estado vacío: icono, texto guía y botones de sugerencia */}
-        {messages.length === 0 && (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <div className="mb-3 inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-merc-blue/10 text-merc-blue">
-                <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                </svg>
-              </div>
-              <p className="text-muted-foreground text-sm">
-                Pregúntame sobre Santiago, IA, o seguros
-              </p>
-              {/* Sugerencias rápidas: al tocar, llenan el input */}
-              <div className="mt-4 flex flex-wrap justify-center gap-2">
-                {[
-                  "¿Quién es Santiago?",
-                  "¿Qué es RAG?",
-                  "¿Cómo funciona OpenClaw?",
-                ].map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    onClick={() => {
-                      setInput(suggestion);
-                    }}
-                    className="px-3 py-1.5 rounded-full text-xs border border-merc-blue/20 text-muted-foreground hover:text-white hover:border-merc-blue/40 transition-colors"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Lista de mensajes: burbujas azul (usuario) o oscura (bot) */}
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-          >
-            <div
-              className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                msg.role === "user"
-                  ? "chat-bubble-user text-white"
-                  : "chat-bubble-bot text-foreground"
-              }`}
-            >
-              {msg.content}
-            </div>
-          </div>
-        ))}
-
-        {/* Indicador de escritura: 3 puntos animados con bounce escalonado */}
-        {loading && (
-          <div className="flex justify-start">
-            <div className="chat-bubble-bot rounded-2xl px-4 py-3">
-              <div className="flex gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-merc-blue/50 animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-2 h-2 rounded-full bg-merc-blue/50 animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-2 h-2 rounded-full bg-merc-blue/50 animate-bounce" style={{ animationDelay: "300ms" }} />
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Elemento invisible para auto-scroll */}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Formulario de input: campo de texto + botón enviar */}
-      <div className="border-t border-merc-blue/10 p-4">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendMessage();
-          }}
-          className="flex gap-2"
-        >
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Escribe tu mensaje..."
-            className="flex-1 rounded-xl bg-merc-dark-lighter border border-merc-blue/15 px-4 py-3 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-merc-blue/40 transition-colors"
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            disabled={loading || !input.trim()}
-            className="rounded-xl bg-merc-blue px-4 py-3 text-sm font-medium text-white hover:bg-merc-blue/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-          >
-            {/* Icono de enviar */}
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-
-  // Panel del system prompt: muestra el prompt en formato código con syntax highlighting
-  const PromptPanel = () => (
-    <div className="h-[500px] sm:h-[550px] overflow-y-auto p-4 sm:p-6">
-      {/* Indicador verde de "activo" */}
-      <div className="flex items-center gap-2 mb-4">
-        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-        <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
-          System Prompt
-        </span>
-      </div>
-      {/* System prompt renderizado con fuente monoespaciada */}
-      <pre className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap font-mono bg-merc-dark/50 rounded-xl p-4 border border-merc-blue/10">
-        {SYSTEM_PROMPT}
-      </pre>
-    </div>
-  );
-
   return (
     <section id="bot" ref={sectionRef} className="relative py-24 sm:py-32">
       {/* Línea divisora sutil naranja */}
@@ -269,7 +280,7 @@ export default function ChatBot() {
                   Chat
                 </span>
               </div>
-              <ChatPanel />
+              <ChatPanel messages={messages} loading={loading} input={input} setInput={setInput} sendMessage={sendMessage} messagesEndRef={messagesEndRef} />
             </div>
             <div className="rounded-2xl bg-merc-dark-card border border-merc-blue/10 overflow-hidden">
               <div className="px-4 py-3 border-b border-merc-blue/10 flex items-center gap-2">
@@ -309,7 +320,7 @@ export default function ChatBot() {
                 </button>
               </div>
               {/* Renderizar panel según tab activo */}
-              {activeTab === "chat" ? <ChatPanel /> : <PromptPanel />}
+              {activeTab === "chat" ? <ChatPanel messages={messages} loading={loading} input={input} setInput={setInput} sendMessage={sendMessage} messagesEndRef={messagesEndRef} /> : <PromptPanel />}
             </div>
           </div>
         </div>
