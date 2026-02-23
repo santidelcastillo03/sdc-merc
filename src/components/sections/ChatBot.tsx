@@ -84,21 +84,24 @@ export default function ChatBot() {
         }),
       });
 
-      if (!res.ok) throw new Error("Error en la respuesta");
-
       const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Error en la respuesta");
+      }
+
       setMessages((prev) => [
         ...prev,
         { role: "assistant", content: data.response },
       ]);
-    } catch {
-      // Mensaje de error si falla la conexión con Gemini
+    } catch (err) {
+      // Mostrar mensaje de error específico del API
+      const errorMsg = err instanceof Error ? err.message : "Error desconocido";
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content:
-            "Lo siento, hubo un error al conectar con el modelo. Verifica que la API key esté configurada.",
+          content: errorMsg,
         },
       ]);
     } finally {

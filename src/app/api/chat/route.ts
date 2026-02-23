@@ -48,7 +48,14 @@ export async function POST(req: NextRequest) {
 
     // Inicializar el cliente de Gemini con el modelo flash (rápido y económico)
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3-flash-preview",
+      // System instruction como objeto Content (requerido por gemini-3)
+      systemInstruction: {
+        role: "user",
+        parts: [{ text: SYSTEM_PROMPT }],
+      },
+    });
 
     // Crear sesión de chat con historial previo (sin el último mensaje)
     // Gemini usa "model" en vez de "assistant" para los mensajes del bot
@@ -57,7 +64,6 @@ export async function POST(req: NextRequest) {
         role: msg.role === "assistant" ? "model" : "user",
         parts: [{ text: msg.content }],
       })),
-      systemInstruction: SYSTEM_PROMPT,
     });
 
     // Enviar el último mensaje del usuario y obtener respuesta
@@ -66,8 +72,16 @@ export async function POST(req: NextRequest) {
     const response = result.response.text();
 
     return NextResponse.json({ response });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Gemini API error:", error);
+    // Detectar rate limiting para mostrar mensaje amigable
+    const statusCode = (error as { status?: number })?.status;
+    if (statusCode === 429) {
+      return NextResponse.json(
+        { error: "Demasiadas solicitudes. Espera unos segundos e intenta de nuevo." },
+        { status: 429 }
+      );
+    }
     return NextResponse.json(
       { error: "Error al procesar la solicitud" },
       { status: 500 }

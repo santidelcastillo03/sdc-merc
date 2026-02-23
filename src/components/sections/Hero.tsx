@@ -37,9 +37,7 @@ export default function Hero() {
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase border border-merc-blue/30 text-merc-blue bg-merc-blue/5">
-            Pasantía 2025 &mdash; Agentes de IA
-          </span>
+        
         </div>
 
         {/* Nombre con gradiente naranja-ámbar en "Del Castillo" (delay 400ms) */}
@@ -50,7 +48,7 @@ export default function Hero() {
         >
           <span className="text-white">Santiago</span>
           <br />
-          <span className="bg-gradient-to-r from-merc-orange via-merc-amber to-merc-orange bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-merc-orange via-merc-amber to-merc-orange bg-clip-text text-transparent translate-y-1 inline-block">
             Del Castillo
           </span>
         </h1>
@@ -78,7 +76,7 @@ export default function Hero() {
             <span>Descubre cómo veo la IA</span>
             {/* Flecha con animación bounce */}
             <svg
-              className="w-4 h-4 animate-bounce"
+              className="w-4 h-4 animate-bounce translate-y-1 group-hover:translate-y-2 transition-transform"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
