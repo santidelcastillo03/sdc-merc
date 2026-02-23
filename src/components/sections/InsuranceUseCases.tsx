@@ -28,9 +28,9 @@ const useCases = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
       </svg>
     ),
-    title: "Automatización de claims",
+    title: "Automatización de reclamos",
     description:
-      "Clasificación automática de reclamos, extracción de datos de documentos, y enrutamiento inteligente. Lo que tomaba días, toma minutos.",
+      "Clasificación automática de reclamos, extracción de datos de documentos, y enrutamiento inteligente. ",
     caseNumber: "02",
     headerBg: "bg-gradient-to-r from-merc-orange/15 to-orange-500/5",
     headerBorder: "border-merc-orange/15",
@@ -109,9 +109,9 @@ export default function InsuranceUseCases() {
           }`}
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
-            Qué haría en{" "}
+            Qué podría hacer en{" "}
             <span className="bg-gradient-to-r from-merc-orange to-merc-amber bg-clip-text text-transparent">
-              Mercantil
+              Seguros Mercantil
             </span>
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground text-lg">
@@ -162,7 +162,48 @@ export default function InsuranceUseCases() {
               </div>
             </div>
           ))}
+
+          {/* Card "Quiero aprender" — ancho completo, mismo estilo que las otras */}
+          <div
+            className={`group relative overflow-hidden rounded-2xl border border-white/[0.05] bg-merc-dark-card sm:col-span-2 hover:border-violet-500/20 transition-all duration-500 hover:-translate-y-0.5 ${
+              visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+            style={{ transitionDelay: visible ? "780ms" : "0ms" }}
+          >
+            {/* Header band: mismo patrón que las demás cards */}
+            <div className="flex items-center justify-between px-5 py-3 border-b border-violet-500/15 bg-gradient-to-r from-violet-500/15 to-violet-500/5">
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-violet-400/60">
+                Objetivo Principal
+              </span>
+              <span className="text-violet-400/60">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+              </span>
+            </div>
+
+            {/* Contenido */}
+            <div className="relative p-5 sm:p-6 overflow-hidden">
+              {/* Hover gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="relative sm:flex sm:items-start sm:gap-8">
+                <div className="sm:flex-1">
+                  <h3 className="font-display text-xl font-semibold text-white mb-3">
+                    
+                    <span className="bg-gradient-to-r from-blue-500 via-blue-300 to-blue-500 bg-clip-text text-transparent"> 
+                      Aprender
+                    </span>
+                    
+                  </h3>
+                  <p className="text-muted-foreground text-[15px] leading-relaxed">
+                    Los casos de uso son ideas, no certezas. Lo que sí sé es que Seguros Mercantil tiene décadas de conocimiento del negocio que yo no tengo y eso me interesa tanto como la IA. Una pasantía para mí no es solo ejecutar, es entender cómo funciona una aseguradora por dentro, qué problemas son reales, y desarrollar el criterio para construir soluciones que de verdad tengan sentido.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </section>
   );

@@ -2,8 +2,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Badge } from "@/components/ui/badge";
-
 // Herramientas secundarias: cada una con icono SVG, nombre, descripción y categoría
 const tools = [
   {
@@ -12,7 +10,9 @@ const tools = [
     category: "Core",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 00.659 1.591L19 14.5m-4.25-11.396c.251.023.501.05.75.082M12 3v5.714" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2M15 3v2M9 19v2M15 19v2M3 9h2M3 15h2M19 9h2M19 15h2" />
+        <rect x="7" y="7" width="10" height="10" rx="1.5" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} />
+        <rect x="9.5" y="9.5" width="5" height="5" rx="0.5" strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} />
       </svg>
     ),
   },
@@ -21,8 +21,8 @@ const tools = [
     description: "Chat diario y compañero de universidad. Procesamiento de documentos y estudio asistido.",
     category: "Chat & Estudio",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+      <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2c0 0 1.5 7.5 2.5 8.5S22 12 22 12s-7.5 1.5-8.5 2.5S12 22 12 22s-1.5-7.5-2.5-8.5S2 12 2 12s7.5-1.5 8.5-2.5S12 2 12 2z" />
       </svg>
     ),
   },
@@ -33,6 +33,28 @@ const tools = [
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+      </svg>
+    ),
+  },
+];
+
+// Menciones honorarias: herramientas que uso ocasionalmente
+const honorableMentions = [
+  {
+    name: "Perplexity",
+    note: "Búsqueda con IA en tiempo real",
+    icon: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+    ),
+  },
+  {
+    name: "GitHub Copilot",
+    note: "Autocompletado en el editor",
+    icon: (
+      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
       </svg>
     ),
   },
@@ -145,6 +167,7 @@ export default function AIStack() {
         {/* Grid de herramientas: chips horizontales con línea de acento izquierda */}
         <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool, i) => (
+
             <div
               key={tool.name}
               className={`group relative overflow-hidden rounded-xl bg-merc-dark-card border border-white/[0.04] p-5 hover:border-merc-blue/25 transition-all duration-500 hover:-translate-y-0.5 ${
@@ -178,6 +201,41 @@ export default function AIStack() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Menciones honorarias: fila de chips minimalistas */}
+        <div
+          className={`mt-6 transition-all duration-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+          style={{ transitionDelay: visible ? "740ms" : "0ms" }}
+        >
+          <div className="flex items-center gap-3">
+            <span className="h-px flex-1 bg-white/[0.05]" />
+            <span className="text-[10px] font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              Menciones honorarias
+            </span>
+            <span className="h-px flex-1 bg-white/[0.05]" />
+          </div>
+
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            {honorableMentions.map((item) => (
+              <div
+                key={item.name}
+                className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-lg border border-white/[0.06] bg-merc-dark-card hover:border-white/[0.12] transition-colors duration-300"
+              >
+                <span className="text-muted-foreground/70 group-hover:text-white/80 transition-colors duration-300">
+                  {item.icon}
+                </span>
+                <span className="font-display text-sm font-semibold text-white/85 group-hover:text-white transition-colors duration-300">
+                  {item.name}
+                </span>
+                <span className="text-[11px] text-muted-foreground hidden sm:inline">
+                  {item.note}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
