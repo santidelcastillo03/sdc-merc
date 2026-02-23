@@ -3,44 +3,62 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Casos de uso: RAG, claims, riesgo, monitoreo — cada uno con gradiente de hover
+// Casos de uso: cada uno con banda de color de encabezado estilo expediente
 const useCases = [
   {
     icon: (
-      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
       </svg>
     ),
     title: "RAG de pólizas",
     description:
       "Base de conocimiento inteligente: cualquier empleado pregunta en lenguaje natural y obtiene respuestas precisas sobre pólizas, procedimientos y coberturas.",
-    gradient: "from-blue-500/10 to-merc-blue/5",
+    caseNumber: "01",
+    headerBg: "bg-gradient-to-r from-blue-600/15 to-merc-blue/5",
+    headerBorder: "border-merc-blue/15",
+    headerText: "text-blue-300/60",
+    iconColor: "text-blue-300/60",
+    hoverGradient: "from-blue-500/8 to-transparent",
+    hoverBorder: "hover:border-merc-blue/20",
   },
   {
     icon: (
-      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
       </svg>
     ),
     title: "Automatización de claims",
     description:
       "Clasificación automática de reclamos, extracción de datos de documentos, y enrutamiento inteligente. Lo que tomaba días, toma minutos.",
-    gradient: "from-merc-orange/10 to-orange-500/5",
+    caseNumber: "02",
+    headerBg: "bg-gradient-to-r from-merc-orange/15 to-orange-500/5",
+    headerBorder: "border-merc-orange/15",
+    headerText: "text-merc-orange/60",
+    iconColor: "text-merc-orange/60",
+    hoverGradient: "from-merc-orange/8 to-transparent",
+    hoverBorder: "hover:border-merc-orange/20",
   },
   {
     icon: (
-      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
       </svg>
     ),
     title: "Análisis de riesgo",
     description:
       "Evaluación de perfiles con IA que detecta patrones en datos históricos, complementando el juicio del analista con insights basados en datos.",
-    gradient: "from-merc-amber/10 to-yellow-500/5",
+    caseNumber: "03",
+    headerBg: "bg-gradient-to-r from-merc-amber/15 to-yellow-500/5",
+    headerBorder: "border-merc-amber/15",
+    headerText: "text-merc-amber/60",
+    iconColor: "text-merc-amber/60",
+    hoverGradient: "from-merc-amber/8 to-transparent",
+    hoverBorder: "hover:border-merc-amber/20",
   },
   {
     icon: (
-      <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
       </svg>
@@ -48,7 +66,13 @@ const useCases = [
     title: "Monitoreo 24/7",
     description:
       "Agentes que nunca duermen: supervisando procesos, detectando anomalías, y alertando al equipo humano cuando algo requiere atención.",
-    gradient: "from-emerald-500/10 to-green-500/5",
+    caseNumber: "04",
+    headerBg: "bg-gradient-to-r from-emerald-500/15 to-green-500/5",
+    headerBorder: "border-emerald-500/15",
+    headerText: "text-emerald-400/60",
+    iconColor: "text-emerald-400/60",
+    hoverGradient: "from-emerald-500/8 to-transparent",
+    hoverBorder: "hover:border-emerald-500/20",
   },
 ];
 
@@ -95,12 +119,12 @@ export default function InsuranceUseCases() {
           </p>
         </div>
 
-        {/* Grid 2x2 de cards con gradiente de fondo que aparece al hover */}
+        {/* Grid 2x2: cards estilo expediente con banda de color superior */}
         <div className="mt-12 grid gap-5 sm:grid-cols-2">
           {useCases.map((uc, i) => (
             <div
               key={uc.title}
-              className={`group relative rounded-2xl bg-merc-dark-card border border-merc-blue/10 p-6 sm:p-8 hover:border-merc-blue/20 transition-all duration-500 hover:-translate-y-0.5 overflow-hidden ${
+              className={`group relative overflow-hidden rounded-2xl border border-white/[0.05] bg-merc-dark-card ${uc.hoverBorder} transition-all duration-500 hover:-translate-y-0.5 ${
                 visible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
@@ -109,21 +133,32 @@ export default function InsuranceUseCases() {
                 transitionDelay: visible ? `${300 + i * 120}ms` : "0ms",
               }}
             >
-              {/* Gradiente de fondo: invisible por defecto, aparece al hover */}
+              {/* Banda de encabezado con número de caso e icono */}
               <div
-                className={`absolute inset-0 bg-gradient-to-br ${uc.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-              />
-              {/* Contenido sobre el gradiente */}
-              <div className="relative z-10">
-                <div className="inline-flex p-2.5 rounded-xl bg-white/5 text-white mb-4">
-                  {uc.icon}
+                className={`flex items-center justify-between px-5 py-3 border-b ${uc.headerBorder} ${uc.headerBg}`}
+              >
+                <span
+                  className={`font-mono text-[10px] font-semibold uppercase tracking-[0.22em] ${uc.headerText}`}
+                >
+                  Caso {uc.caseNumber}
+                </span>
+                <span className={uc.iconColor}>{uc.icon}</span>
+              </div>
+
+              {/* Contenido de la card */}
+              <div className="relative p-5 sm:p-6 overflow-hidden">
+                {/* Gradiente de hover que emerge desde la esquina superior izquierda */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${uc.hoverGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
+                />
+                <div className="relative">
+                  <h3 className="font-display text-xl font-semibold text-white mb-3">
+                    {uc.title}
+                  </h3>
+                  <p className="text-muted-foreground text-[15px] leading-relaxed">
+                    {uc.description}
+                  </p>
                 </div>
-                <h3 className="font-display text-xl font-semibold text-white mb-3">
-                  {uc.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed text-[15px]">
-                  {uc.description}
-                </p>
               </div>
             </div>
           ))}

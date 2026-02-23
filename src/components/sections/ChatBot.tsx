@@ -250,7 +250,7 @@ export default function ChatBot() {
             </span>
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground text-lg">
-            Un chatbot que conoce sobre mí y sobre IA en seguros. El system prompt es visible — sin cajas negras.
+            Un chatbot que conoce sobre mí y sobre IA en seguros. El system prompt es visible para analizar su funcionamiento.
           </p>
         </div>
 

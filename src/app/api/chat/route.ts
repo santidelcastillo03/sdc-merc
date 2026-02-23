@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     // Inicializar el cliente de Gemini con el modelo flash (rápido y económico)
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-flash-preview", // gemini-2.5-flash-lite
       // System instruction como objeto Content (requerido por gemini-3)
       systemInstruction: {
         role: "user",

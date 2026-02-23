@@ -141,6 +141,12 @@
   box-shadow: 0 0 30px rgba(251, 84, 1, 0.15), 0 0 60px rgba(251, 84, 1, 0.05);
 }
 
+/* Patrón de puntos para la card terminal de OpenClaw */
+.dot-grid {
+  background-image: radial-gradient(circle, rgba(251, 84, 1, 0.05) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
 /* Scrollbar personalizado estilo Mercantil */
 ::-webkit-scrollbar {
   width: 6px;
