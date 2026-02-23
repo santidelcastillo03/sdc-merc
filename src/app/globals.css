@@ -1,26 +1,173 @@
+/* Imports base de Tailwind CSS v4, animaciones y estilos de shadcn */
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Variante dark: se activa cuando un ancestro tiene la clase .dark */
+@custom-variant dark (&:is(.dark *));
 
+/* Tokens de diseño para Tailwind: colores, fuentes y radios */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-jakarta);       /* Plus Jakarta Sans como fuente body */
+  --font-display: var(--font-syne);       /* Syne como fuente de títulos */
   --font-mono: var(--font-geist-mono);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* Colores de marca Mercantil */
+  --color-merc-blue: #003392;         /* Azul principal de Mercantil */
+  --color-merc-orange: #fb5401;       /* Naranja secundario */
+  --color-merc-amber: #f9a421;        /* Ámbar terciario */
+  --color-merc-dark: #020B1F;         /* Fondo principal oscuro */
+  --color-merc-dark-card: #0a1628;    /* Fondo de tarjetas */
+  --color-merc-dark-lighter: #111d35; /* Fondo de inputs y paneles */
+  /* Radios de borde escalonados desde un radio base */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Variables CSS: paleta oscura con colores Mercantil */
+:root {
+  --radius: 0.625rem;
+  --background: #020B1F;
+  --foreground: #e8edf5;
+  --card: #0a1628;
+  --card-foreground: #e8edf5;
+  --popover: #0a1628;
+  --popover-foreground: #e8edf5;
+  --primary: #003392;
+  --primary-foreground: #ffffff;
+  --secondary: #fb5401;
+  --secondary-foreground: #ffffff;
+  --muted: #111d35;
+  --muted-foreground: #8899b4;
+  --accent: #f9a421;
+  --accent-foreground: #020B1F;
+  --destructive: #ef4444;
+  --border: rgba(0, 51, 146, 0.2);
+  --input: rgba(0, 51, 146, 0.25);
+  --ring: #003392;
+}
+
+/* Estilos base globales */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  html {
+    scroll-behavior: smooth; /* Scroll suave para navegación por anclas */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Animación del fondo gradiente mesh del Hero: mueve las posiciones del gradiente */
+@keyframes mesh-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+}
+
+/* Gradiente mesh: múltiples gradientes radiales con los colores de Mercantil */
+.gradient-mesh {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 51, 146, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(251, 84, 1, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 40% 80%, rgba(249, 164, 33, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(0, 51, 146, 0.2) 0%, transparent 40%);
+  background-size: 200% 200%;
+  animation: mesh-shift 20s ease-in-out infinite;
+}
+
+/* Animación de entrada: elementos aparecen subiendo con fade */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reveal {
+  opacity: 0;
+  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cursor parpadeante para efecto de escritura */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typing-cursor::after {
+  content: '▌';
+  animation: blink 1s infinite;
+  color: #fb5401;
+}
+
+/* Resplandor naranja para la card destacada de OpenClaw */
+.glow-orange {
+  box-shadow: 0 0 30px rgba(251, 84, 1, 0.15), 0 0 60px rgba(251, 84, 1, 0.05);
+}
+
+/* Scrollbar personalizado estilo Mercantil */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020B1F;
+}
+::-webkit-scrollbar-thumb {
+  background: #003392;
+  border-radius: 3px;
+}
+
+/* Burbujas del chat: gradiente azul para usuario, oscuro para bot */
+.chat-bubble-user {
+  background: linear-gradient(135deg, #003392 0%, #0044c4 100%);
+}
+.chat-bubble-bot {
+  background: linear-gradient(135deg, #111d35 0%, #0a1628 100%);
+  border: 1px solid rgba(0, 51, 146, 0.3);
+}
+
+/* Overlay de textura de ruido sutil para profundidad visual */
+.noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
 }
