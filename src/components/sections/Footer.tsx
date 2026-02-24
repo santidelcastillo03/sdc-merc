@@ -18,7 +18,7 @@ export default function Footer() {
             <p className="mt-2 text-sm text-muted-foreground max-w-xs">
               Construido con Next.js y asistencia de IA.
               <br />
-              Pasantía Seguros Mercantil 2025.
+              Pasantía Seguros Mercantil 2026.
             </p>
           </div>
 
