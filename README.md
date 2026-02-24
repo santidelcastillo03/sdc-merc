@@ -1,6 +1,6 @@
 # Santiago Del Castillo — Pasantia Seguros Mercantil
 
-Landing page interactiva creada como entregable praa la pasantia en **Seguros Mercantil**.
+Landing page interactiva creada como entregable para la pasantia en **Seguros Mercantil**.
 
 La pagina demuestra conocimiento tecnico, creatividad y vision sobre como la inteligencia artificial puede generar valor real en la industria aseguradora venezolana.
 
