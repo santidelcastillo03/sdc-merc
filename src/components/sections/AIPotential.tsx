@@ -12,9 +12,9 @@ const cards = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
       </svg>
     ),
-    title: "Qué puede hacer",
+    title: "¿Qué puede hacer?",
     description:
-      "Automatizar lo repetitivo, procesar volúmenes masivos de información, y asistir en decisiones complejas con datos que un humano tardaría semanas en analizar.",
+      "Automatizar lo repetitivo, procesar volúmenes masivos de información, y ejecutar flujos completos de trabajo. Ya no es solo un chat: los agentes de IA orquestan tareas paso a paso y entregan resultados listos para que el experto decida.",
     number: "",
     accentBar: "",
     accentText: "text-merc-orange",
@@ -27,7 +27,7 @@ const cards = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
       </svg>
     ),
-    title: "Qué no puede hacer",
+    title: "¿Qué no puede hacer?",
     description:
       "Reemplazar el criterio humano en situaciones ambiguas, entender el contexto emocional de un cliente, ni tomar decisiones éticas por sí sola. La supervisión humana sigue siendo esencial.",
     number: "",
@@ -42,7 +42,7 @@ const cards = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
       </svg>
     ),
-    title: "Dónde está el valor real",
+    title: "¿Dónde está el valor real?",
     description:
       "En la intersección: IA que potencia a las personas, no que las reemplaza. Un agente que prepara todo para que el experto tome la mejor decisión en segundos.",
     number: "",
@@ -89,7 +89,7 @@ export default function AIPotential() {
             </span>
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground text-lg">
-            Una visión honesta: ni hype exagerado ni escepticismo ciego.
+            Capacidades reales, límites claros, y dónde está la oportunidad.
           </p>
         </div>
 

@@ -109,10 +109,10 @@ export default function InsuranceUseCases() {
           }`}
         >
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
-            Qué podría hacer en{" "}
+            ¿Qué podría hacer en{" "}
             <span className="bg-gradient-to-r from-merc-orange to-merc-amber bg-clip-text text-transparent">
               Seguros Mercantil
-            </span>
+            </span>?
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground text-lg">
             Casos de uso concretos donde la IA genera valor real en seguros.
