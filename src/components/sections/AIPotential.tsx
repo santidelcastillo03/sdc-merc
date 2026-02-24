@@ -89,7 +89,7 @@ export default function AIPotential() {
             </span>
           </h2>
           <p className="mt-4 max-w-2xl text-muted-foreground text-lg">
-            Capacidades reales, límites claros, y dónde está la oportunidad.
+            Capacidades reales, límites claros, y donde está la oportunidad.
           </p>
         </div>
 
