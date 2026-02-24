@@ -16,9 +16,9 @@ const SYSTEM_PROMPT = `Eres un asistente virtual creado por Santiago Del Castill
 
 Tu conocimiento se limita estrictamente a dos temas: Santiago Del Castillo y el sector de seguros en Venezuela (con énfasis en Seguros Mercantil y cómo la IA puede transformarlo). No respondas preguntas fuera de estos temas.
 
-═══════════════════════════════════════
+
 PERFIL COMPLETO DE SANTIAGO DEL CASTILLO
-═══════════════════════════════════════
+
 
 Datos de contacto:
 - Correo: santijdcc@gmail.com
@@ -64,9 +64,9 @@ Relación con la IA:
 - Enfoque pragmático: usa IA para resolver problemas reales, no solo experimentar
 - Esta misma landing page fue construida con Claude Code como herramienta de desarrollo
 
-═══════════════════════════════════════
+
 SEGUROS MERCANTIL Y EL SECTOR ASEGURADOR EN VENEZUELA
-═══════════════════════════════════════
+
 
 Sobre Seguros Mercantil:
 - Más de 35 años de experiencia y credibilidad en el mercado asegurador venezolano
@@ -94,9 +94,9 @@ Plataformas digitales de Seguros Mercantil:
 - Integración financiera con CrediTotal
 - Programa "Impulso Mercantil" de responsabilidad social
 
-═══════════════════════════════════════
+
 IA APLICADA AL SECTOR ASEGURADOR VENEZOLANO
-═══════════════════════════════════════
+
 
 Casos de uso concretos donde la IA transforma seguros:
 
@@ -130,9 +130,9 @@ Principios fundamentales:
 - La IA debe adaptarse al contexto regulatorio venezolano (SUDEASEG)
 - La transformación digital es gradual: se empieza por los procesos de mayor impacto
 
-═══════════════════════════════════════
+
 INSTRUCCIONES DE COMPORTAMIENTO
-═══════════════════════════════════════
+
 
 Idioma:
 - Responde en español por defecto
@@ -168,10 +168,9 @@ interface ChatPanelProps {
   input: string;
   setInput: (v: string) => void;
   sendMessage: () => void;
-  messagesEndRef: React.RefObject<HTMLDivElement | null>;
 }
 
-function ChatPanel({ messages, loading, input, setInput, sendMessage, messagesEndRef }: ChatPanelProps) {
+function ChatPanel({ messages, loading, input, setInput, sendMessage }: ChatPanelProps) {
   return (
     <div className="flex flex-col h-[500px] sm:h-[550px]">
       {/* Área de mensajes con scroll */}
@@ -238,8 +237,6 @@ function ChatPanel({ messages, loading, input, setInput, sendMessage, messagesEn
             </div>
           </div>
         )}
-        {/* Elemento invisible para auto-scroll */}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Formulario de input: campo de texto + botón enviar */}
@@ -256,7 +253,7 @@ function ChatPanel({ messages, loading, input, setInput, sendMessage, messagesEn
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Escribe tu mensaje..."
-            className="flex-1 rounded-xl bg-merc-dark-lighter border border-merc-blue/15 px-4 py-3 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-merc-blue/40 transition-colors"
+            className="flex-1 rounded-xl bg-merc-dark-lighter border border-merc-blue/15 px-4 py-3 text-base text-white placeholder:text-muted-foreground focus:outline-none focus:border-merc-blue/40 transition-colors"
             disabled={loading}
           />
           <button
@@ -279,13 +276,6 @@ function ChatPanel({ messages, loading, input, setInput, sendMessage, messagesEn
 function PromptPanel() {
   return (
     <div className="h-[500px] sm:h-[550px] overflow-y-auto p-4 sm:p-6">
-      {/* Indicador verde de "activo" */}
-      <div className="flex items-center gap-2 mb-4">
-        <span className="inline-block w-2 h-2 rounded-full bg-emerald-500" />
-        <span className="text-xs font-semibold uppercase tracking-wider text-emerald-500">
-          System Prompt
-        </span>
-      </div>
       {/* System prompt renderizado con fuente monoespaciada */}
       <pre className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap font-mono bg-merc-dark/50 rounded-xl p-4 border border-merc-blue/10">
         {SYSTEM_PROMPT}
@@ -301,7 +291,6 @@ export default function ChatBot() {
   const [input, setInput] = useState("");                     // Texto del input
   const [loading, setLoading] = useState(false);              // Estado de carga (esperando respuesta)
   const [activeTab, setActiveTab] = useState<"chat" | "prompt">("chat"); // Tab activo en mobile
-  const messagesEndRef = useRef<HTMLDivElement>(null);        // Ref para auto-scroll al último mensaje
 
   // IntersectionObserver: activa animaciones al 10% de visibilidad
   useEffect(() => {
@@ -314,11 +303,6 @@ export default function ChatBot() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-
-  // Auto-scroll al final cuando llegan nuevos mensajes
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   // Envía mensaje al API route y agrega la respuesta al historial
   const sendMessage = async () => {
@@ -402,7 +386,7 @@ export default function ChatBot() {
                   Chat
                 </span>
               </div>
-              <ChatPanel messages={messages} loading={loading} input={input} setInput={setInput} sendMessage={sendMessage} messagesEndRef={messagesEndRef} />
+              <ChatPanel messages={messages} loading={loading} input={input} setInput={setInput} sendMessage={sendMessage} />
             </div>
             <div className="rounded-2xl bg-merc-dark-card border border-merc-blue/10 overflow-hidden">
               <div className="px-4 py-3 border-b border-merc-blue/10 flex items-center gap-2">
@@ -442,7 +426,7 @@ export default function ChatBot() {
                 </button>
               </div>
               {/* Renderizar panel según tab activo */}
-              {activeTab === "chat" ? <ChatPanel messages={messages} loading={loading} input={input} setInput={setInput} sendMessage={sendMessage} messagesEndRef={messagesEndRef} /> : <PromptPanel />}
+              {activeTab === "chat" ? <ChatPanel messages={messages} loading={loading} input={input} setInput={setInput} sendMessage={sendMessage} /> : <PromptPanel />}
             </div>
           </div>
         </div>

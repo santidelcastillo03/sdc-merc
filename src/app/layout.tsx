@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, Plus_Jakarta_Sans } from "next/font/google";
+import ScrollToTop from "@/components/ScrollToTop";
 import "./globals.css";
 
 // Tipografía display para títulos y headings
@@ -38,6 +39,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <body className={`${syne.variable} ${jakarta.variable} antialiased`}>
+        <ScrollToTop />
         {children}
       </body>
     </html>
